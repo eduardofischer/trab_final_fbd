@@ -1,0 +1,36 @@
+.App {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70%;
+}
+
+button {
+  margin: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 30px;
+}
+
+thead {
+  background-color: #1F1E1B;
+}
+
+td, th {
+  border-bottom: 1px solid #4e4c47;
+  text-align: left;
+  padding: 8px;
+  max-width: 100px;
+}
+
+tr:nth-child(even) {
+  background-color: #1F1E1B;
+}
