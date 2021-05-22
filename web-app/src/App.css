@@ -10,14 +10,23 @@
   width: 70%;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+section {
+  margin-bottom: 50px;
+}
+
 button {
   margin: 10px;
+  height: 30px;
 }
 
 table {
   border-collapse: collapse;
-  width: 100%;
-  margin: 30px;
 }
 
 thead {
@@ -28,7 +37,6 @@ td, th {
   border-bottom: 1px solid #4e4c47;
   text-align: left;
   padding: 8px;
-  max-width: 100px;
 }
 
 tr:nth-child(even) {
