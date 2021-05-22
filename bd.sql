@@ -150,6 +150,12 @@ create table if not exists Participacao_Torneio (
 	id_torneio uuid not null references Torneios(id_torneio)
 );
 
+-- CORRECAO E2
+create table if not exists Partida_Torneio (
+	id_partida uuid not null references Partidas(id_partida),
+	id_torneio uuid not null references Torneios(id_torneio)
+);
+
 -- Usuários
 insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
 values ('magnus',  'magzzy@gmail.com', 'NO', '234fdsa86t2');
