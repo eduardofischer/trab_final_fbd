@@ -156,6 +156,11 @@ create table if not exists Partida_Torneio (
 	id_torneio uuid not null references Torneios(id_torneio)
 );
 
+create table if not exists Amizades (
+	nome_usuario_1 varchar(100) not null references Usuarios,
+	nome_usuario_2 varchar(100) not null references Usuarios
+);
+
 -- Usuários
 insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
 values ('magnus',  'magzzy@gmail.com', 'NO', '234fdsa86t2');
@@ -165,6 +170,9 @@ values ('caruana',  'fabi@outlook.com', 'ITA', '2dcfdsa86t3');
 
 insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
 values ('bobbyfischer', 'fischer@outlook.com', 'USA', '234fdwd86t3');
+
+insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
+values ('hikaru', 'hikaru@outlook.com', 'USA', '786fdwdd86t3');
 
 -- Formatos Partidas
 insert into Formatos_Partida values ('32e64910-c824-4060-8054-0c80ccc2d072', 'rapid', '10 minutes', '0 seconds');
@@ -243,10 +251,20 @@ insert into Torneios values ('0cfa37aa-9711-4e1c-885e-b7a481e68938', 'Enxadrista
 
 -- Filiação Clube
 insert into Filiacao_Clube values ('magnus', false, 'FIDE GMs');
+insert into Filiacao_Clube values ('magnus', true, 'Enxadristas Otakus');
 insert into Filiacao_Clube values ('caruana', false, 'Enxadristas Otakus');
 insert into Filiacao_Clube values ('bobbyfischer', true, 'FIDE GMs');
+insert into Filiacao_Clube values ('bobbyfischer', false, 'Enxadristas Otakus');
+insert into Filiacao_Clube values ('bobbyfischer', false, 'Enxadristas Angolanos');
 
 -- Participação Torneio
 insert into Participacao_Torneio values ('magnus', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
 insert into Participacao_Torneio values ('caruana', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
 insert into Participacao_Torneio values ('bobbyfischer', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+
+-- CORRECAO E2
+-- TODO: PARTIDAS TORNEIO
+
+insert into Amizades values ('magnus', 'bobbyfischer');
+insert into Amizades values ('magnus', 'caruana');
+insert into Amizades values ('hikaru', 'caruana');
