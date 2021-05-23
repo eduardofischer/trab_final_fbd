@@ -142,12 +142,17 @@ function App() {
 
   return (
     <div className="App">
+      <header>
+        <h1>Trabalho Final FBD</h1>
+        <div className="name">Eduardo Spitzer Fischer - 00290399</div>
+        <div className="name">Rodrigo Paranhos Bastos - 00261162</div>
+      </header>
       <div className="container">
         <section>
           <div className="header">
-            <h1>Quantidade de GMs na modalidade Rapid de cada Clube com mais de </h1>
+            <h2>Quantidade de GMs na modalidade Rapid de cada Clube com mais de </h2>
             <input type="number" value={input1} onChange={e => setInput1(e.target.value)}/>
-            <h1> GMs nessa modalidade</h1>
+            <h2> GMs nessa modalidade</h2>
             <button onClick={() => getGmsRapidClube(input1)}>Atualizar</button>
           </div>
           <div className="body">
@@ -166,7 +171,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Vitorias como brancas de cada usuario em cada torneio</h1>
+            <h2>Vitorias como brancas de cada usuario em cada torneio</h2>
             <button onClick={() => getVitoriasBrancasTorneios()}>Atualizar</button>
           </div>
           <div className="body">
@@ -187,7 +192,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Vitorias de cada usuario com cada cor em cada torneio </h1>
+            <h2>Vitorias de cada usuario com cada cor em cada torneio </h2>
             <button onClick={() => getVitoriasCorTorneios()}>Atualizar</button>
           </div>
           <div className="body">
@@ -228,9 +233,9 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Clubes em comum entre os usuarios</h1>
+            <h2>Clubes em comum entre os usuarios</h2>
             <input value={input2} onChange={e => setInput2(e.target.value)}/>
-            <h1>e</h1>
+            <h2>e</h2>
             <input value={input3} onChange={e => setInput3(e.target.value)}/>
             <button onClick={() => getClubesEmComum(input2, input3)}>Atualizar</button>
           </div>
@@ -254,7 +259,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Torneios onde não participaram jogadores da nacionalidade</h1>
+            <h2>Torneios onde não participaram jogadores da nacionalidade</h2>
             <input value={input4} onChange={e => setInput4(e.target.value)}/>
             <button onClick={() => getTorneiosSemNacionalidade(input4)}>Atualizar</button>
           </div>
@@ -278,7 +283,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Torneios onde nenhuma partida empatou</h1>
+            <h2>Torneios onde nenhuma partida empatou</h2>
             <button onClick={() => getTorneiosSemEmpates()}>Atualizar</button>
           </div>
           <div className="body">
@@ -300,11 +305,11 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Membros do clube</h1>
+            <h2>Membros do clube</h2>
             <input value={input5} onChange={e => setInput5(e.target.value)}/>
-            <h1>que ja resolveram problemas do tema</h1>
+            <h2>que ja resolveram problemas do tema</h2>
             <input value={input6} onChange={e => setInput6(e.target.value)}/>
-            <h1>em corridas de problemas</h1>
+            <h2>em corridas de problemas</h2>
             <button onClick={() => getMembrosProblemaCorrida(input5, input6)}>Atualizar</button>
           </div>
           <div className="body">
@@ -321,7 +326,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Dificuldade media dos problemas resolvidos por membros do clube</h1>
+            <h2>Dificuldade media dos problemas resolvidos por membros do clube</h2>
             <input value={input7} onChange={e => setInput7(e.target.value)}/>
             <button onClick={() => getDificuldadeMediaProblemasClube(input7)}>Atualizar</button>
           </div>
@@ -340,7 +345,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Jogadores Invictos no Mundial de Xadrez</h1>
+            <h2>Jogadores Invictos no Mundial de Xadrez</h2>
             <button onClick={() => getInvictosMundial()}>Atualizar</button>
           </div>
           <div className="body">
@@ -375,7 +380,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Quantidade de problemas resolvidos em cada batalha de problemas</h1>
+            <h2>Quantidade de problemas resolvidos em cada batalha de problemas</h2>
             <button onClick={() => getProblemasPorBatalha()}>Atualizar</button>
           </div>
           <div className="body">
@@ -392,7 +397,7 @@ function App() {
 
         <section>
           <div className="header">
-            <h1>Numero de partidas jogadas por cada usuario na modalidade</h1>
+            <h2>Numero de partidas jogadas por cada usuario na modalidade</h2>
             <input value={input8} onChange={e => setInput8(e.target.value)}/>
             <button onClick={() => getPartidasModalidade(input8)}>Atualizar</button>
           </div>
