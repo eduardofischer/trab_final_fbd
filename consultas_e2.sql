@@ -18,43 +18,23 @@ from problemas_corrida
     -- Mostra a quantidade de GMs na modalidade Rapid de cada Clube com mais de X GMs nessa modalidade
     -- USUARIOS x FILIACAO_CLUBE x CLUBES
     -- HAVING e GROUP BY
-    SELECT COUNT(usuarios.nome_de_usuario) as rapid_gms, nome_clube, clubes.descricao
-	  FROM usuarios
-	  JOIN filiacao_clube ON usuarios.nome_de_usuario=filiacao_clube.nome_de_usuario
-	  JOIN clubes ON nome_clube=clubes.nome
-	  WHERE (usuarios.glicko_rapid > 2500)
-	  GROUP BY nome_clube, clubes.descricao
-	  HAVING COUNT(usuarios.nome_de_usuario) > 0
-	  
-    -- PRA TESTAR:
-    insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
-    values ('cecilia',  'ceci@outlook.com', 'FRA', '2dchto098t3', 2678);
-    
-    insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
-    values ('michael',  'michael@outlook.com', 'USA', '2dchttrv8t3', 2700);
-    
-    insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
-    values ('jorge',  'jorge@outlook.com', 'BRA', '468httrv8t3', 2643);
-    
-    insert into Filiacao_Clube values ('cecilia', false, 'Enxadristas Otakus');
-    insert into Filiacao_Clube values ('michael', false, 'FIDE GMs');
-    insert into Filiacao_Clube values ('jorge', false, 'FIDE GMs');
+    select count(usuarios.nome_de_usuario) as rapid_gms, nome_clube, clubes.descricao
+	  from usuarios
+	  join filiacao_clube on usuarios.nome_de_usuario=filiacao_clube.nome_de_usuario
+	  join clubes on nome_clube=clubes.nome
+    where (usuarios.glicko_rapid > 2500)
+    group by nome_clube, clubes.descricao
+    having count(usuarios.nome_de_usuario) > 0
     
     -- Vitorias como brancas de cada usuario em cada torneio
     -- Usuarios x Partidas x Torneios
-    SELECT COUNT(partidas.resultado) as vitorias_como_brancas, usuarios.nome_de_usuario, torneios.titulo
-	FROM usuarios
-	JOIN partidas ON partidas.jogador_brancas=usuarios.nome_de_usuario
-	JOIN participacao_torneio ON participacao_torneio.nome_de_usuario=usuarios.nome_de_usuario
-	JOIN torneios ON torneios.id_torneio=participacao_torneio.id_torneio
-	WHERE partidas.resultado = 'brancas'
-	GROUP BY usuarios.nome_de_usuario, torneios.titulo
-	
-	-- PRA TESTAR
-	insert into Partidas values ('d7a23241-d749-4aca-94ff-6d44e9fd1a48', 'brancas', '2021-03-28T20:25:15+00:00', 'caruana', 'magnus', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
-    insert into Partidas values ('473448d4-efd3-43c9-8708-e0a38c3f6601', 'pretas', '2021-03-28T20:25:15+00:00', 'caruana', 'magnus', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
-    insert into Partidas values ('fc32a023-69c4-41a6-94a7-3cf2f6ec7f79', 'pretas', '2021-03-28T20:25:15+00:00', 'magnus', 'bobbyfischer', '9b82a31d-d546-4417-bbeb-eacd100f6177', 100, 100);
-
+    select count(partidas.resultado) as vitorias_como_brancas, usuarios.nome_de_usuario, torneios.titulo
+	from usuarios
+    	join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
+    	join participacao_torneio on participacao_torneio.nome_de_usuario=usuarios.nome_de_usuario
+    	join torneios on torneios.id_torneio=participacao_torneio.id_torneio
+	where partidas.resultado = 'brancas'
+	group by usuarios.nome_de_usuario, torneios.titulo
 
 -- b. No mínimo duas delas devem necessitar serem respondidas com subconsulta (isto é, não existe formulação
 -- equivalente usando apenas joins);
@@ -108,14 +88,24 @@ from problemas_corrida
 
 -- d. No mínimos duas delas devem utilizar a visão definida no item anterior.
 
-    -- TODO: Membros do clube X que ja resolveram problemas do tema Y em corridas de problemas
+    -- Membros do clube X que ja resolveram problemas do tema Y em corridas de problemas
+    -- usuarios x filiacao_clube x view_problemas_corrida
+    select usuarios.nome_de_usuario
+    from usuarios
+        join filiacao_clube on filiacao_clube.nome_de_usuario=usuarios.nome_de_usuario
+        join view_problemas_corrida on usuario=usuarios.nome_de_usuario
+    where filiacao_clube.nome_clube = 'FIDE GMs' and view_problemas_corrida.tema='en-passant'
     
-    -- TODO: 
+    -- Dificuldade media dos problemas resolvidos por membros de determinado clube
+    select avg(view_problemas_corrida.dificuldade)
+    from usuarios
+        join filiacao_clube on filiacao_clube.nome_de_usuario=usuarios.nome_de_usuario
+        join view_problemas_corrida on usuario=usuarios.nome_de_usuario
+    where filiacao_clube.nome_clube = 'FIDE GMs'
+    group by nome_clube
 
 
 -- Outras 3 quaisquer
-
-
     -- Invictos no Mundial de Xadrez
     -- Usuarios x Partidas x Torneios
     select usuarios.nome_de_usuario as invictos_mundial_de_xadrez
@@ -146,17 +136,23 @@ from problemas_corrida
     -- problemas x problemas_batalha x batalhas_de_problemas
     select count(problemas.id_problema), batalhas_de_problemas.id_batalha
     from problemas
-    join problemas_batalha on problemas_batalha.id_problema = problemas.id_problema
-    join batalhas_de_problemas on batalhas_de_problemas.id_batalha = problemas_batalha.id_batalha
+        join problemas_batalha on problemas_batalha.id_problema = problemas.id_problema
+        join batalhas_de_problemas on batalhas_de_problemas.id_batalha = problemas_batalha.id_batalha
     group by batalhas_de_problemas.id_batalha
 
-    -- 
-
-
--- e. Sua base de dados deve estar populada de forma a retornar resultados para todas consultas. Recomenda-se
--- que as instâncias sejam pensadas para testar se as consultas estão corretas, abrangendo vários resultados.
-
-
--- f. As consultas devem ser significativamente distintas entre si. Será considerada a utilidade e diversidade das
--- consultas
-
+    -- Numero de partidas jogadas por cada usuario para uma dada modalidade
+    -- partidas x usuarios x formatos_partida
+    select nome_de_usuario, count(id_partida)
+    from (
+    	select id_partida, nome_de_usuario, modalidade
+    	from partidas
+    		join usuarios on partidas.jogador_pretas = usuarios.nome_de_usuario
+    		join formatos_partida using(id_formato)
+    	union
+    	select id_partida, nome_de_usuario, modalidade
+    	from partidas
+    		join usuarios on partidas.jogador_brancas = usuarios.nome_de_usuario
+    		join formatos_partida using(id_formato)
+    ) as partidas_usuario
+    where modalidade = 'blitz'
+    group by nome_de_usuario;
