@@ -14,6 +14,19 @@ const app = express()
 // Permite a realização de requests cross-origin (CORS) para a API
 app.use(cors())
 
+// Visão que une os dados sobre um problema resolvido em uma determinada corridas_de_problemas com os dados da corrida
+// Ex.: /view_corrida_problemas
+app.get('/view_corrida_problemas', async (req, res) => {
+  try {
+    const data = await sql`select * from view_problemas_corrida`
+
+    res.status(200).json(data)
+  } catch (e) {
+    console.error(e)
+    res.sendStatus(500)
+  }
+})
+
 // Mostra a quantidade de GMs na modalidade Rapid de cada Clube com mais de X GMs nessa modalidade
 // Ex.: /gms_rapid_clube?min_users=0
 app.get('/gms_rapid_clube', async (req, res) => {

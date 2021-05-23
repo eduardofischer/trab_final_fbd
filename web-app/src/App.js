@@ -6,6 +6,7 @@ import CodeBlock from './components/CodeBlock'
 const API_URL = 'http://localhost:8000'
 
 function App() {
+  const [viewCorridaProblemas, setViewCorridaProblemas] = useState([])
   const [gmsRapidClube, setGmsRapidClube] = useState([])
   const [vitoriasBrancasTorneios, setVitoriasBrancasTorneios] = useState([])
   const [vitoriasCorTorneios, setVitoriasCorTorneios] = useState([])
@@ -17,6 +18,15 @@ function App() {
   const [invictosMundial, setInvictosMundial] = useState([])
   const [problemasPorBatalha, setProblemasPorBatalha] = useState([])
   const [partidasModalidade, setPartidasModalidade] = useState([])
+
+  // Visão que une os dados sobre um problema resolvido em uma determinada corridas_de_problemas com os dados da corrida
+  const getViewCorridaProblemas = async () => {
+    fetch(`${API_URL}/view_corrida_problemas`)
+      .then(res => res.json())
+      .then(data => {
+        setViewCorridaProblemas(data)
+      })
+  }
 
   // Quantidade de GMs na modalidade Rapid de cada Clube com mais de X GMs nessa modalidade
   const getGmsRapidClube = async (min_users) => {
@@ -128,6 +138,7 @@ function App() {
   const [input9, setInput9] = useState('Torneio Mundial de Xadrez')
 
   useEffect(() => {
+    getViewCorridaProblemas()
     getGmsRapidClube(input1)
     getVitoriasBrancasTorneios()
     getVitoriasCorTorneios()
@@ -151,6 +162,25 @@ function App() {
         <div className="name">Rodrigo Paranhos Bastos - 00261162</div>
       </header>
       <div className="container">
+        <section>
+          <div className="header">
+            <h2>A visão abaixo une os dados sobre um problema resolvido em uma determinada corridas_de_problemas com os dados da corrida</h2>
+            <button onClick={() => getViewCorridaProblemas()}>Atualizar</button>
+          </div>
+          <CodeBlock text={
+` -- Criação da View
+create view view_problemas_corrida as
+select *
+from problemas_corrida
+  join problemas using(id_problema)
+  join corridas_de_problemas using(id_corrida)
+  
+-- Query da View
+select * from view_problemas_corrida`
+          }/>
+          <Table data={viewCorridaProblemas}/>
+        </section>
+
         <section>
           <div className="header">
             <h2>Quantidade de GMs na modalidade Rapid de cada Clube com mais de </h2>
