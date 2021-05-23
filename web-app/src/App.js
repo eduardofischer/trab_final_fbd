@@ -138,6 +138,7 @@ function App() {
     getInvictosMundial()
     getProblemasPorBatalha()
     getPartidasModalidade(input8)
+    // eslint-disable-next-line
   }, [])
 
   return (
