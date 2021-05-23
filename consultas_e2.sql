@@ -85,7 +85,6 @@ from problemas_corrida
     		and Partidas.resultado = 'empate'
     );
 
-
 -- d. No mínimos duas delas devem utilizar a visão definida no item anterior.
 
     -- Membros do clube X que ja resolveram problemas do tema Y em corridas de problemas

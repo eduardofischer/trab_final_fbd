@@ -220,6 +220,9 @@ insert into Corridas_de_Problemas values ('e84c1ed5-dcdd-4e2a-bb86-005188298cc4'
 insert into Problemas_Corrida values ('ebc73e57-5dd5-4aa0-95be-26967422ee6f', '32babc93-3560-421a-9dde-d37b0f2dd49b');
 insert into Problemas_Corrida values ('ebc73e57-5dd5-4aa0-95be-26967422ee6f', 'f24d950e-28ee-4c27-862a-da18298aa78c');
 insert into Problemas_Corrida values ('ebc73e57-5dd5-4aa0-95be-26967422ee6f', '591a1bfe-6b2a-4eec-ae73-4832dd8dfed3');
+insert into Problemas_Corrida values ('e84c1ed5-dcdd-4e2a-bb86-005188298cc4', '32babc93-3560-421a-9dde-d37b0f2dd49b');
+insert into Problemas_Corrida values ('e84c1ed5-dcdd-4e2a-bb86-005188298cc4', 'f24d950e-28ee-4c27-862a-da18298aa78c');
+insert into Problemas_Corrida values ('e28bbb28-981a-4217-a674-f6e9980a1dbc', '591a1bfe-6b2a-4eec-ae73-4832dd8dfed3');
 
 -- Batalhas de Problemas
 insert into Batalhas_de_Problemas values ('8d0389a6-52f4-49fc-9c44-06f9a21699d8', 'magnus', 'caruana', 'caruana', 20, 25, 20, 20);
@@ -230,6 +233,9 @@ insert into Batalhas_de_Problemas values ('1f47bfe4-c72a-4534-92ff-ad0a74e843a2'
 insert into Problemas_Batalha values ('8d0389a6-52f4-49fc-9c44-06f9a21699d8', '32babc93-3560-421a-9dde-d37b0f2dd49b');
 insert into Problemas_Batalha values ('8d0389a6-52f4-49fc-9c44-06f9a21699d8', 'f24d950e-28ee-4c27-862a-da18298aa78c');
 insert into Problemas_Batalha values ('8d0389a6-52f4-49fc-9c44-06f9a21699d8', '591a1bfe-6b2a-4eec-ae73-4832dd8dfed3');
+insert into Problemas_Batalha values ('e88dc9cb-2dd3-4589-8d59-5742fb877cdb', '32babc93-3560-421a-9dde-d37b0f2dd49b');
+insert into Problemas_Batalha values ('e88dc9cb-2dd3-4589-8d59-5742fb877cdb', 'f24d950e-28ee-4c27-862a-da18298aa78c');
+insert into Problemas_Batalha values ('1f47bfe4-c72a-4534-92ff-ad0a74e843a2', '591a1bfe-6b2a-4eec-ae73-4832dd8dfed3');
 
 -- Clubes
 insert into Clubes values ('Enxadristas Angolanos', 'angola_flag.png', 'Clube voltado a promoção do Xadrez na Angola');
@@ -257,7 +263,7 @@ insert into Filiacao_Clube values ('magnus', false, 'Enxadristas Otakus');
 insert into Filiacao_Clube values ('caruana', false, 'Enxadristas Otakus');
 insert into Filiacao_Clube values ('bobbyfischer', true, 'FIDE GMs');
 insert into Filiacao_Clube values ('bobbyfischer', false, 'Enxadristas Otakus');
-insert into Filiacao_Clube values ('bobbyfischer', true, 'Enxadristas Angolanos');
+insert into Filiacao_Clube values ('hikaru', true, 'Enxadristas Angolanos');
 insert into Filiacao_Clube values ('hikaru', true, 'Enxadristas Otakus');
 
 -- Participação Torneio
@@ -276,3 +282,10 @@ insert into Partida_Torneio values ('fc32a022-69c4-41a6-94a7-3cf2f6ec7f68', 'b3f
 insert into Amizades values ('magnus', 'bobbyfischer');
 insert into Amizades values ('magnus', 'caruana');
 insert into Amizades values ('hikaru', 'caruana');
+
+-- Definição das visões
+create view view_problemas_corrida as
+select *
+from problemas_corrida
+	join problemas using(id_problema)
+	join corridas_de_problemas using(id_corrida);
