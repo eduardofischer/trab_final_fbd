@@ -120,7 +120,7 @@ create table if not exists Topicos (
 	id_topico uuid unique not null,
 	clube varchar(200) not null references Clubes,
 	titulo varchar(64) not null,
-	autor varchar(100) not null references Usuarios(nome_de_usuario)
+	autor varchar(100) not null references Usuarios(nome_de_usuario),
 	primary key(clube, titulo)
 );
 
@@ -237,14 +237,14 @@ insert into Clubes values ('Enxadristas Otakus', 'akatsuki_flag.png', 'Anime e X
 insert into Clubes values ('FIDE GMs', 'FIDE.png', 'A mais alta elite do xadrez mundial');
 
 -- Topicos
-insert into Topicos values ('a2d195ef-c037-4941-bf17-e5a9d80c22b9', 'FIDE GMs', 'O que é roque?');
-insert into Topicos values ('2e44417f-ccdf-4ae4-802c-187ed648073a', 'FIDE GMs', 'O que é en passant?');
-insert into Topicos values ('cbd26e4d-f643-4b44-b511-1b1c33f3427a', 'Enxadristas Otakus', 'Sciciliana vs Gambito do Elefante');
+insert into Topicos values ('a2d195ef-c037-4941-bf17-e5a9d80c22b9', 'FIDE GMs', 'O que é roque?', 'magnus');
+insert into Topicos values ('2e44417f-ccdf-4ae4-802c-187ed648073a', 'FIDE GMs', 'O que é en passant?', 'caruana');
+insert into Topicos values ('cbd26e4d-f643-4b44-b511-1b1c33f3427a', 'Enxadristas Otakus', 'Sciciliana vs Gambito do Elefante', 'bobbyfischer');
 
 -- Mensagens
-insert into Mensagens values (NOW(), 'Prefira ativar os peões do centro aos das laterais', 'cbd26e4d-f643-4b44-b511-1b1c33f3427a');
-insert into Mensagens values (NOW(), 'O rei move-se duas casas para esquerda ou direita, e a torre move-se sobre o rei!', 'a2d195ef-c037-4941-bf17-e5a9d80c22b9');
-insert into Mensagens values (NOW(), 'É quando um peão pode capturar outro que está ao seu lado.', '2e44417f-ccdf-4ae4-802c-187ed648073a');
+insert into Mensagens values (NOW(), 'Prefira ativar os peões do centro aos das laterais', 'cbd26e4d-f643-4b44-b511-1b1c33f3427a', 'magnus');
+insert into Mensagens values (NOW(), 'O rei move-se duas casas para esquerda ou direita, e a torre move-se sobre o rei!', 'a2d195ef-c037-4941-bf17-e5a9d80c22b9', 'caruana');
+insert into Mensagens values (NOW(), 'É quando um peão pode capturar outro que está ao seu lado.', '2e44417f-ccdf-4ae4-802c-187ed648073a', 'bobbyfischer');
 
 -- Torneios
 insert into Torneios values ('b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2', 'FIDE GMs', 'Torneio Mundial de Xadrez', 'O maior torneio de xadrez do planeta.', '2021-03-28T21:06:10+00:00', '2021-04-28T21:06:10+00:00');
