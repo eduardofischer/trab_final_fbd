@@ -6,25 +6,13 @@ const postgres = require('postgres')
 const PORT = 8000
 
 // Conexão com o banco de dados
-const sql = postgres('postgres://app:12345678@localhost:5432/db-chess-fbd')
+const sql = postgres('postgres://app:12345678@localhost:5432/db-chess-fbd', {max: 1})
 
 // Criação da aplicação express (HTTP server)
 const app = express()
 
 // Permite a realização de requests cross-origin (CORS) para a API
 app.use(cors())
-
-app.get('/partidas', async (req, res) => {
-  try {
-    const data = await sql`
-      select * from partidas
-    `
-    res.status(200).json(data)
-  } catch (e) {
-    console.error(e)
-    res.sendStatus(500)
-  }
-})
 
 // Mostra a quantidade de GMs na modalidade Rapid de cada Clube com mais de X GMs nessa modalidade
 // Ex.: /gms_rapid_clube?min_users=0
@@ -53,11 +41,13 @@ app.get('/gms_rapid_clube', async (req, res) => {
 app.get('/vitorias_brancas_torneios', async (req, res) => {
   try {
     const data = await sql`
-      select count(partidas.resultado) as vitorias_como_brancas, usuarios.nome_de_usuario, torneios.titulo
+      select count(partidas.resultado) as vitorias_como_brancas,
+        usuarios.nome_de_usuario,
+        torneios.titulo
       from usuarios
           join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
-          join participacao_torneio on participacao_torneio.nome_de_usuario=usuarios.nome_de_usuario
-          join torneios on torneios.id_torneio=participacao_torneio.id_torneio
+          join partida_torneio on partida_torneio.id_partida=partidas.id_partida
+          join torneios on torneios.id_torneio=partida_torneio.id_torneio
       where partidas.resultado = 'brancas'
       group by usuarios.nome_de_usuario, torneios.titulo
     `
@@ -68,31 +58,34 @@ app.get('/vitorias_brancas_torneios', async (req, res) => {
   }
 })
 
-// Vitorias de cada usuario com cada cor em cada torneio
-// Ex.: /vitorias_cor_torneios
-app.get('/vitorias_cor_torneios', async (req, res) => {
+// Vitorias de cada usuario com cada cor em cada torneio 
+// Ex.: /vitorias_torneios_cor
+app.get('/vitorias_torneios_cor', async (req, res) => {
   try {
     const data = await sql`
-      select vitorias_como_brancas, vitorias_como_pretas, t1.nome_de_usuario, t1.titulo
+      select sum(vitorias_como_brancas) as vitorias_como_brancas, 
+        sum(vitorias_como_pretas) as vitorias_como_pretas, 
+        nome_de_usuario, 
+        titulo 
       from (
-        select count(partidas.resultado) as vitorias_como_brancas, usuarios.nome_de_usuario, torneios.titulo
+        select count(partidas.resultado) as vitorias_como_brancas, 0 vitorias_como_pretas, usuarios.nome_de_usuario, torneios.titulo
         from usuarios
-            join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
-            join participacao_torneio on participacao_torneio.nome_de_usuario=usuarios.nome_de_usuario
-            join torneios on torneios.id_torneio=participacao_torneio.id_torneio
+          join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
+          join partida_torneio on partida_torneio.id_partida=partidas.id_partida
+          join torneios on torneios.id_torneio=partida_torneio.id_torneio
         where partidas.resultado = 'brancas'
         group by usuarios.nome_de_usuario, torneios.titulo
-      ) as t1
-      left join (
-        select count(partidas.resultado) as vitorias_como_pretas, usuarios.nome_de_usuario, torneios.titulo
+        union 
+        select 0, count(partidas.resultado) as vitorias_como_pretas, usuarios.nome_de_usuario, torneios.titulo
         from usuarios
-            join partidas on partidas.jogador_pretas=usuarios.nome_de_usuario
-            join participacao_torneio on participacao_torneio.nome_de_usuario=usuarios.nome_de_usuario
-            join torneios on torneios.id_torneio=participacao_torneio.id_torneio
+          join partidas on partidas.jogador_pretas=usuarios.nome_de_usuario
+          join partida_torneio on partida_torneio.id_partida=partidas.id_partida
+          join torneios on torneios.id_torneio=partida_torneio.id_torneio
         where partidas.resultado = 'pretas'
         group by usuarios.nome_de_usuario, torneios.titulo
-      ) as t2
-      on t1.nome_de_usuario=t2.nome_de_usuario
+      ) as union_vitorias_brancas_pretas 
+      group by titulo, nome_de_usuario
+      order by titulo
     `
     res.status(200).json(data)
   } catch (e) {

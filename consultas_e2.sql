@@ -25,16 +25,73 @@ from problemas_corrida
     where (usuarios.glicko_rapid > 2500)
     group by nome_clube, clubes.descricao
     having count(usuarios.nome_de_usuario) > 0
+	  
+    -- PRA TESTAR:
+    insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+    values ('cecilia',  'ceci@outlook.com', 'FRA', '2dchto098t3', 2678);
+    
+    insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+    values ('michael',  'michael@outlook.com', 'USA', '2dchttrv8t3', 2700);
+    
+    insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+    values ('jorge',  'jorge@outlook.com', 'BRA', '468httrv8t3', 2643);
+    
+    insert into Filiacao_Clube values ('cecilia', false, 'Enxadristas Otakus');
+    insert into Filiacao_Clube values ('michael', false, 'FIDE GMs');
+    insert into Filiacao_Clube values ('jorge', false, 'FIDE GMs');
     
     -- Vitorias como brancas de cada usuario em cada torneio
     -- Usuarios x Partidas x Torneios
-    select count(partidas.resultado) as vitorias_como_brancas, usuarios.nome_de_usuario, torneios.titulo
+	select count(partidas.resultado) as vitorias_como_brancas, usuarios.nome_de_usuario, torneios.titulo
 	from usuarios
     	join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
-    	join participacao_torneio on participacao_torneio.nome_de_usuario=usuarios.nome_de_usuario
-    	join torneios on torneios.id_torneio=participacao_torneio.id_torneio
+    	join partida_torneio on partida_torneio.id_partida=partidas.id_partida
+    	join torneios on torneios.id_torneio=partida_torneio.id_torneio
 	where partidas.resultado = 'brancas'
 	group by usuarios.nome_de_usuario, torneios.titulo
+	
+	-- PRA TESTAR
+	insert into Partidas values ('d7a23241-d749-4aca-94ff-6d44e9fd1a48', 'brancas', '2021-03-28T20:25:15+00:00', 'caruana', 'magnus', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
+    insert into Partidas values ('473448d4-efd3-43c9-8708-e0a38c3f6601', 'pretas', '2021-03-28T20:25:15+00:00', 'caruana', 'magnus', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+    insert into Partidas values ('fc32a023-69c4-41a6-94a7-3cf2f6ec7f79', 'pretas', '2021-03-28T20:25:15+00:00', 'magnus', 'bobbyfischer', '9b82a31d-d546-4417-bbeb-eacd100f6177', 100, 100);
+
+	
+	-- vitorias de cada usuario com cada cor em cada torneio SERA QUE FUNCIONA?
+	select sum(vitorias_como_brancas) as vitorias_como_brancas, 
+    	sum(vitorias_como_pretas) as vitorias_como_pretas, 
+    	nome_de_usuario, 
+    	titulo 
+    from (
+    	select count(partidas.resultado) as vitorias_como_brancas, 0 vitorias_como_pretas, usuarios.nome_de_usuario, torneios.titulo
+    	from usuarios
+    		join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
+    		join partida_torneio on partida_torneio.id_partida=partidas.id_partida
+    		join torneios on torneios.id_torneio=partida_torneio.id_torneio
+    	where partidas.resultado = 'brancas'
+    	group by usuarios.nome_de_usuario, torneios.titulo
+    	union 
+    	select 0, count(partidas.resultado) as vitorias_como_pretas, usuarios.nome_de_usuario, torneios.titulo
+    	from usuarios
+    		join partidas on partidas.jogador_pretas=usuarios.nome_de_usuario
+    		join partida_torneio on partida_torneio.id_partida=partidas.id_partida
+    		join torneios on torneios.id_torneio=partida_torneio.id_torneio
+    	where partidas.resultado = 'pretas'
+    	group by usuarios.nome_de_usuario, torneios.titulo
+    ) as union_vitorias_brancas_pretas 
+    group by titulo, nome_de_usuario
+    order by titulo
+	
+	-- TESTE?
+    insert into Partidas values ('abc448d3-efd3-43c9-8708-e0a38c3f6601', 'pretas', '2021-03-28T20:25:15+00:00', 'caruana', 'bobbyfischer', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+    insert into Partidas values ('abc448d3-efd3-43c9-8708-e0a38c3f6699', 'pretas', '2021-03-28T20:25:15+00:00', 'magnus', 'bobbyfischer', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+    insert into Partidas values ('d8b23240-d749-4aca-94ff-6d44e9fd0a48', 'brancas', '2021-03-28T20:25:15+00:00', 'magnus', 'caruana', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
+    insert into Partidas values ('abc448d3-efd3-43c9-8708-e0a38c3f6688', 'brancas', '2021-03-28T20:25:15+00:00', 'bobbyfischer', 'caruana', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+    
+    insert into Partida_Torneio values ('abc448d3-efd3-43c9-8708-e0a38c3f6601', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+    insert into Partida_Torneio values ('abc448d3-efd3-43c9-8708-e0a38c3f6699', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+    insert into Partida_Torneio values ('d8b23240-d749-4aca-94ff-6d44e9fd0a48', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
+    insert into Partida_Torneio values ('abc448d3-efd3-43c9-8708-e0a38c3f6688', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+	
 
 -- b. No mínimo duas delas devem necessitar serem respondidas com subconsulta (isto é, não existe formulação
 -- equivalente usando apenas joins);
@@ -85,6 +142,7 @@ from problemas_corrida
     		and Partidas.resultado = 'empate'
     );
 
+
 -- d. No mínimos duas delas devem utilizar a visão definida no item anterior.
 
     -- Membros do clube X que ja resolveram problemas do tema Y em corridas de problemas
@@ -103,8 +161,8 @@ from problemas_corrida
     where filiacao_clube.nome_clube = 'FIDE GMs'
     group by nome_clube
 
-
 -- Outras 3 quaisquer
+
     -- Invictos no Mundial de Xadrez
     -- Usuarios x Partidas x Torneios
     select usuarios.nome_de_usuario as invictos_mundial_de_xadrez
@@ -155,3 +213,4 @@ from problemas_corrida
     ) as partidas_usuario
     where modalidade = 'blitz'
     group by nome_de_usuario;
+

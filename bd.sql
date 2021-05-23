@@ -164,17 +164,17 @@ create table if not exists Amizades (
 );
 
 -- Usuários
-insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
-values ('magnus',  'magzzy@gmail.com', 'NO', '234fdsa86t2');
+insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+values ('magnus',  'magzzy@gmail.com', 'NO', '234fdsa86t2', 2780);
 
-insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
-values ('caruana',  'fabi@outlook.com', 'ITA', '2dcfdsa86t3');
+insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+values ('caruana',  'fabi@outlook.com', 'ITA', '2dcfdsa86t3', 2690);
 
-insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
-values ('bobbyfischer', 'fischer@outlook.com', 'USA', '234fdwd86t3');
+insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+values ('bobbyfischer', 'fischer@outlook.com', 'USA', '234fdwd86t3', 2505);
 
-insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha)
-values ('hikaru', 'hikaru@outlook.com', 'USA', '786fdwdd86t3');
+insert into Usuarios (nome_de_usuario, email, nacionalidade, hash_senha, glicko_rapid)
+values ('hikaru', 'hikaru@outlook.com', 'USA', '786fdwdd86t3', 2590);
 
 -- Formatos Partidas
 insert into Formatos_Partida values ('32e64910-c824-4060-8054-0c80ccc2d072', 'rapid', '10 minutes', '0 seconds');
@@ -182,10 +182,15 @@ insert into Formatos_Partida values ('c9309e01-832b-4eee-a6d5-9642327537f3', 'bu
 insert into Formatos_Partida values ('9b82a31d-d546-4417-bbeb-eacd100f6177', 'blitz', '3 minutes', '2 seconds');
 
 -- Partidas
-insert into Partidas values ('d7a23240-d749-4aca-94ff-6d44e9fd0a48', 'brancas', '2021-03-28T20:25:15+00:00', 'magnus', 'caruana', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
-insert into Partidas values ('473448d3-efd3-43c9-8708-e0a38c3f6601', 'pretas', '2021-03-28T20:25:15+00:00', 'caruana', 'magnus', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+insert into Partidas values ('d7a23240-d749-4aca-94ff-6d44e9fd0a48', 'pretas', '2021-03-28T20:25:15+00:00', 'magnus', 'caruana', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
+insert into Partidas values ('d7a23240-d749-4aca-94ff-6d44e9fd0149', 'brancas', '2021-03-28T20:25:15+00:00', 'magnus', 'caruana', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
+insert into Partidas values ('473448d3-efd3-43c9-8708-e0a38c3f6601', 'brancas', '2021-03-28T20:25:15+00:00', 'caruana', 'magnus', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
 insert into Partidas values ('fc32a022-69c4-41a6-94a7-3cf2f6ec7f68', 'empate', '2021-03-28T20:25:15+00:00', 'magnus', 'bobbyfischer', '9b82a31d-d546-4417-bbeb-eacd100f6177', 100, 100);
-
+insert into Partidas values ('abc448d3-efd3-43c9-8708-e0a38c3f6601', 'pretas', '2021-03-28T20:25:15+00:00', 'caruana', 'bobbyfischer', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+insert into Partidas values ('abc448d3-efd3-43c9-8708-e0a38c3f6699', 'pretas', '2021-03-28T20:25:15+00:00', 'magnus', 'bobbyfischer', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+insert into Partidas values ('d8b23240-d749-4aca-94ff-6d44e9fd0a48', 'brancas', '2021-03-28T20:25:15+00:00', 'magnus', 'caruana', '32e64910-c824-4060-8054-0c80ccc2d072', 100, 100);
+insert into Partidas values ('abc448d3-efd3-43c9-8708-e0a38c3f6688', 'brancas', '2021-03-28T20:25:15+00:00', 'bobbyfischer', 'caruana', 'c9309e01-832b-4eee-a6d5-9642327537f3', 100, 100);
+    
 -- Jogadas
 insert into Jogadas values ('d7a23240-d749-4aca-94ff-6d44e9fd0a48', row('brancas', 'e4', '2021-03-28T20:43:06+00:00'));
 insert into Jogadas values ('d7a23240-d749-4aca-94ff-6d44e9fd0a48', row('pretas', 'e5', '2021-03-28T20:44:34+00:00'));
@@ -268,6 +273,7 @@ insert into Filiacao_Clube values ('hikaru', true, 'Enxadristas Otakus');
 
 -- Participação Torneio
 insert into Participacao_Torneio values ('magnus', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Participacao_Torneio values ('magnus', '9a9817c7-d987-4a65-a322-9790f0ced469');
 insert into Participacao_Torneio values ('hikaru', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
 insert into Participacao_Torneio values ('caruana', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
 insert into Participacao_Torneio values ('bobbyfischer', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
@@ -275,8 +281,13 @@ insert into Participacao_Torneio values ('bobbyfischer', 'b3f8a9c1-e6cc-44af-a5d
 -- CORRECAO E2
 -- Partida Torneio
 insert into Partida_Torneio values ('d7a23240-d749-4aca-94ff-6d44e9fd0a48', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Partida_Torneio values ('d7a23240-d749-4aca-94ff-6d44e9fd0149', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
 insert into Partida_Torneio values ('473448d3-efd3-43c9-8708-e0a38c3f6601', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
 insert into Partida_Torneio values ('fc32a022-69c4-41a6-94a7-3cf2f6ec7f68', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Partida_Torneio values ('abc448d3-efd3-43c9-8708-e0a38c3f6601', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Partida_Torneio values ('abc448d3-efd3-43c9-8708-e0a38c3f6699', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Partida_Torneio values ('d8b23240-d749-4aca-94ff-6d44e9fd0a48', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
+insert into Partida_Torneio values ('abc448d3-efd3-43c9-8708-e0a38c3f6688', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
 
 -- Amizades
 insert into Amizades values ('magnus', 'bobbyfischer');
