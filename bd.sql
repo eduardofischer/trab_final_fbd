@@ -120,13 +120,15 @@ create table if not exists Topicos (
 	id_topico uuid unique not null,
 	clube varchar(200) not null references Clubes,
 	titulo varchar(64) not null,
+	autor varchar(100) not null references Usuarios(nome_de_usuario)
 	primary key(clube, titulo)
 );
 
 create table if not exists Mensagens (
 	data_mensagem timestamp not null,
 	conteudo varchar(255) not null,
-	id_topico uuid not null references Topicos(id_topico)
+	id_topico uuid not null references Topicos(id_topico),
+	autor varchar(100) not null references Usuarios(nome_de_usuario)
 );
 
 create table if not exists Torneios (
