@@ -90,9 +90,9 @@ function App() {
       })
   }
 
-  // Jogadores Invictos no Mundial de Xadrez
-  const getInvictosMundial = async () => {
-    fetch(`${API_URL}/invictos_mundial`)
+  // Jogadores invictos em determinado torneio
+  const getInvictosMundial = async (torneio) => {
+    fetch(`${API_URL}/invictos?torneio=${torneio}`)
       .then(res => res.json())
       .then(data => {
         setInvictosMundial(data)
@@ -125,6 +125,7 @@ function App() {
   const [input6, setInput6] = useState('en-passant')
   const [input7, setInput7] = useState('FIDE GMs')
   const [input8, setInput8] = useState('rapid')
+  const [input9, setInput9] = useState('Torneio Mundial de Xadrez')
 
   useEffect(() => {
     getGmsRapidClube(input1)
@@ -138,6 +139,7 @@ function App() {
     getInvictosMundial()
     getProblemasPorBatalha()
     getPartidasModalidade(input8)
+    getInvictosMundial(input9)
     // eslint-disable-next-line
   }, [])
 
@@ -164,7 +166,7 @@ function App() {
     join clubes on nome_clube=clubes.nome
   where (usuarios.glicko_rapid > 2500)
   group by nome_clube, clubes.descricao
-  having count(usuarios.nome_de_usuario) > min_users`
+  having count(usuarios.nome_de_usuario) > '${input1}'`
             }/>
             <Table data={gmsRapidClube}/>
           </div>
@@ -246,13 +248,13 @@ function App() {
   from Filiacao_Clube
     join Usuarios using(nome_de_usuario)
     join Clubes on Clubes.nome = Filiacao_Clube.nome_clube
-  where nome_de_usuario = user1
+  where nome_de_usuario = '${input2} '
   and Clubes.nome in (
     select Clubes.nome
     from Filiacao_Clube
       join Usuarios using(nome_de_usuario)
       join Clubes on Clubes.nome = Filiacao_Clube.nome_clube
-    where nome_de_usuario = user2`
+    where nome_de_usuario = '${input3}'`
             }/>
             <Table data={clubesEmComum}/>
           </div>
@@ -275,7 +277,7 @@ function App() {
     from Participacao_Torneio
       join Torneios using(id_torneio)
       join Usuarios using(nome_de_usuario)
-    where Usuarios.nacionalidade = nacionalidade
+    where Usuarios.nacionalidade = '${input4}'
   )`
             }/>
             <Table data={torneiosSemNacionalidade}/>
@@ -319,7 +321,8 @@ function App() {
   from usuarios
     join filiacao_clube on filiacao_clube.nome_de_usuario=usuarios.nome_de_usuario
     join view_problemas_corrida on usuario=usuarios.nome_de_usuario
-  where filiacao_clube.nome_clube = clube and view_problemas_corrida.tema = tema`
+  where filiacao_clube.nome_clube = '${input5}' 
+    and view_problemas_corrida.tema = '${input6}'`
             }/>
             <Table data={membrosProblemaCorrida}/>
           </div>
@@ -337,7 +340,7 @@ function App() {
   from usuarios
       join filiacao_clube on filiacao_clube.nome_de_usuario=usuarios.nome_de_usuario
       join view_problemas_corrida on usuario=usuarios.nome_de_usuario
-  where filiacao_clube.nome_clube = clube
+  where filiacao_clube.nome_clube = '${input7}'
   group by nome_clube`
             }/>
             <Table data={dificuldadeMediaProblemasClube}/>
@@ -346,12 +349,13 @@ function App() {
 
         <section>
           <div className="header">
-            <h2>Jogadores Invictos no Mundial de Xadrez</h2>
-            <button onClick={() => getInvictosMundial()}>Atualizar</button>
+            <h2>Jogadores Invictos </h2>
+            <input value={input9} onChange={e => setInput9(e.target.value)}/>
+            <button onClick={() => getInvictosMundial(input9)}>Atualizar</button>
           </div>
           <div className="body">
             <CodeBlock text={
-` select usuarios.nome_de_usuario as invictos_mundial_de_xadrez
+` select usuarios.nome_de_usuario as invictos
   from usuarios 
   where nome_de_usuario not in (
       select partidas.jogador_brancas
@@ -359,20 +363,20 @@ function App() {
           join partida_torneio on partida_torneio.id_partida = partidas.id_partida
           join torneios on torneios.id_torneio = partida_torneio.id_torneio
       where partidas.resultado = 'pretas' 
-          and torneios.titulo = 'Torneio Mundial de Xadrez'
+          and torneios.titulo = '${input9}'
       union
       select partidas.jogador_pretas
       from partidas
           join partida_torneio on partida_torneio.id_partida = partidas.id_partida
           join torneios on torneios.id_torneio = partida_torneio.id_torneio
       where partidas.resultado = 'brancas' 
-          and torneios.titulo = 'Torneio Mundial de Xadrez'
+          and torneios.titulo = '${input9}'
   )
   and nome_de_usuario in (
       select nome_de_usuario
           from participacao_torneio
               join torneios on participacao_torneio.id_torneio=torneios.id_torneio
-          where torneios.titulo='Torneio Mundial de Xadrez'
+          where torneios.titulo='${input9}'
   )`
             }/>
             <Table data={invictosMundial}/>
@@ -416,7 +420,7 @@ function App() {
       join usuarios on partidas.jogador_brancas = usuarios.nome_de_usuario
       join formatos_partida using(id_formato)
   ) as partidas_usuario
-  where modalidade = modalidade
+  where modalidade = '${input8}'
   group by nome_de_usuario`
             }/>
             <Table data={partidasModalidade}/>

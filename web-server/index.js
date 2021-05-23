@@ -21,7 +21,7 @@ app.get('/gms_rapid_clube', async (req, res) => {
   
   try {
     const data = await sql`
-      select count(usuarios.nome_de_usuario) as rapid_gms, nome_clube, clubes.descricao
+      select nome_clube, count(usuarios.nome_de_usuario) as rapid_gms, clubes.descricao
       from usuarios
         join filiacao_clube on usuarios.nome_de_usuario=filiacao_clube.nome_de_usuario
         join clubes on nome_clube=clubes.nome
@@ -41,8 +41,8 @@ app.get('/gms_rapid_clube', async (req, res) => {
 app.get('/vitorias_brancas_torneios', async (req, res) => {
   try {
     const data = await sql`
-      select count(partidas.resultado) as vitorias_como_brancas,
-        usuarios.nome_de_usuario,
+      select usuarios.nome_de_usuario,
+        count(partidas.resultado) as vitorias_como_brancas,
         torneios.titulo
       from usuarios
           join partidas on partidas.jogador_brancas=usuarios.nome_de_usuario
@@ -63,9 +63,9 @@ app.get('/vitorias_brancas_torneios', async (req, res) => {
 app.get('/vitorias_torneios_cor', async (req, res) => {
   try {
     const data = await sql`
-      select sum(vitorias_como_brancas) as vitorias_como_brancas, 
+      select nome_de_usuario, 
+        sum(vitorias_como_brancas) as vitorias_como_brancas, 
         sum(vitorias_como_pretas) as vitorias_como_pretas, 
-        nome_de_usuario, 
         titulo 
       from (
         select count(partidas.resultado) as vitorias_como_brancas, 0 vitorias_como_pretas, usuarios.nome_de_usuario, torneios.titulo
@@ -215,10 +215,12 @@ app.get('/dificuldade_media_problemas_clube', async (req, res) => {
 
 // Jogadores Invictos no Mundial de Xadrez
 // Ex.: /invictos_mundial
-app.get('/invictos_mundial', async (req, res) => {
+app.get('/invictos', async (req, res) => {
+  const torneio = req.query.torneio
+
   try {
     const data = await sql`
-      select usuarios.nome_de_usuario as invictos_mundial_de_xadrez
+      select usuarios.nome_de_usuario as invicto
       from usuarios 
       where nome_de_usuario not in (
           select partidas.jogador_brancas
@@ -226,20 +228,20 @@ app.get('/invictos_mundial', async (req, res) => {
               join partida_torneio on partida_torneio.id_partida = partidas.id_partida
               join torneios on torneios.id_torneio = partida_torneio.id_torneio
           where partidas.resultado = 'pretas' 
-              and torneios.titulo = 'Torneio Mundial de Xadrez'
+              and torneios.titulo = ${torneio}
           union
           select partidas.jogador_pretas
           from partidas
               join partida_torneio on partida_torneio.id_partida = partidas.id_partida
               join torneios on torneios.id_torneio = partida_torneio.id_torneio
           where partidas.resultado = 'brancas' 
-              and torneios.titulo = 'Torneio Mundial de Xadrez'
+              and torneios.titulo = ${torneio}
       )
       and nome_de_usuario in (
           select nome_de_usuario
               from participacao_torneio
                   join torneios on participacao_torneio.id_torneio=torneios.id_torneio
-              where torneios.titulo='Torneio Mundial de Xadrez'
+              where torneios.titulo = ${torneio}
       )
     `
     res.status(200).json(data)
