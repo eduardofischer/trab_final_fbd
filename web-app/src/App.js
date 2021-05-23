@@ -278,7 +278,7 @@ select * from view_problemas_corrida`
   from Filiacao_Clube
     join Usuarios using(nome_de_usuario)
     join Clubes on Clubes.nome = Filiacao_Clube.nome_clube
-  where nome_de_usuario = '${input2} '
+  where nome_de_usuario = '${input2}'
   and Clubes.nome in (
     select Clubes.nome
     from Filiacao_Clube
