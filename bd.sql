@@ -250,21 +250,27 @@ insert into Torneios values ('9a9817c7-d987-4a65-a322-9790f0ced469', 'Enxadrista
 insert into Torneios values ('0cfa37aa-9711-4e1c-885e-b7a481e68938', 'Enxadristas Otakus', 'Torneio Attack on Titan', 'Duelo entre os titãs do xadrez.', '2021-03-28T21:06:10+00:00', '2021-04-28T21:06:10+00:00');
 
 -- Filiação Clube
-insert into Filiacao_Clube values ('magnus', false, 'FIDE GMs');
-insert into Filiacao_Clube values ('magnus', true, 'Enxadristas Otakus');
+insert into Filiacao_Clube values ('magnus', true, 'FIDE GMs');
+insert into Filiacao_Clube values ('magnus', false, 'Enxadristas Otakus');
 insert into Filiacao_Clube values ('caruana', false, 'Enxadristas Otakus');
 insert into Filiacao_Clube values ('bobbyfischer', true, 'FIDE GMs');
 insert into Filiacao_Clube values ('bobbyfischer', false, 'Enxadristas Otakus');
-insert into Filiacao_Clube values ('bobbyfischer', false, 'Enxadristas Angolanos');
+insert into Filiacao_Clube values ('bobbyfischer', true, 'Enxadristas Angolanos');
+insert into Filiacao_Clube values ('hikaru', true, 'Enxadristas Otakus');
 
 -- Participação Torneio
 insert into Participacao_Torneio values ('magnus', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Participacao_Torneio values ('hikaru', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
 insert into Participacao_Torneio values ('caruana', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
 insert into Participacao_Torneio values ('bobbyfischer', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
 
 -- CORRECAO E2
--- TODO: PARTIDAS TORNEIO
+-- Partida Torneio
+insert into Partida_Torneio values ('d7a23240-d749-4aca-94ff-6d44e9fd0a48', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
+insert into Partida_Torneio values ('473448d3-efd3-43c9-8708-e0a38c3f6601', '0cfa37aa-9711-4e1c-885e-b7a481e68938');
+insert into Partida_Torneio values ('fc32a022-69c4-41a6-94a7-3cf2f6ec7f68', 'b3f8a9c1-e6cc-44af-a5d1-98cdd0a056a2');
 
+-- Amizades
 insert into Amizades values ('magnus', 'bobbyfischer');
 insert into Amizades values ('magnus', 'caruana');
 insert into Amizades values ('hikaru', 'caruana');
